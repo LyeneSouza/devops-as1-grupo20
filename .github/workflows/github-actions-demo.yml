@@ -6,16 +6,28 @@ jobs:
   build-job:
     runs-on: ubuntu-latest
     steps:
+      # Faz download da última versão do código no repositório
       - uses: actions/checkout@v4
-      - run: cat --version
+      # Faz build criando uma nova imagem com o código atualizado
+      - run: docker build -t $CI_DOCKERHUB_USER/devops-as2-grupo20:latest .
+      # Faz login no docker hub
+      - run: docker login -u $CI_DOCKERHUB_USER -p $CI_DOCKERHUB_PASSWORD
+      # Sobe a imagem criada no docker hub
+      - run: docker push $CI_DOCKERHUB_USER/devops-as2-grupo20:latest
 
   test-job:
     runs-on: ubuntu-latest
     steps:
+      # Faz download da última versão do código no repositório
       - uses: actions/checkout@v4
-      - run: cat index.html
-      - run: cat main.js
-      - run: cat styles.css
+      # Faz download do executável do snyk
+      - run: curl https://static.snyk.io/cli/latest/snyk-linux -o snyk
+      # Fornece permissão para executar o snyk
+      - run: chmod +x ./snyk
+      # Autentica o snyk
+      - run: ./snyk auth $CI_SNYK_AUTH_TOKEN
+      # Roda os testes SAST (Static Code Analysis)
+      - run: ./snyk code test --org=$CI_SNYK_ORG
 
   deploy-job:
     runs-on: ubuntu-latest

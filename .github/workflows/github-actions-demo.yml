@@ -2,14 +2,17 @@ name: CI
 
 on: [push]
 
+# Definindo variáveis de ambiente com dados sensíveis
+env:
+  CI_DOCKERHUB_USER: ${{ secrets.CI_DOCKERHUB_USER }}
+  CI_DOCKERHUB_PASSWORD: ${{ secrets.CI_DOCKERHUB_PASSWORD }}
+  CI_SNYK_AUTH_TOKEN: ${{ secrets.CI_SNYK_AUTH_TOKEN }}
+  CI_SNYK_ORG: ${{ secrets.CI_SNYK_ORG }}
+
 jobs:
   build-job:
     runs-on: ubuntu-latest
     steps:
-      # Definindo variáveis de ambiente com dados sensíveis
-      env:
-        CI_DOCKERHUB_USER: ${{ secrets.CI_DOCKERHUB_USER }}
-        CI_DOCKERHUB_PASSWORD: ${{ secrets.CI_DOCKERHUB_PASSWORD }}
       # Faz download da última versão do código no repositório
       - uses: actions/checkout@v4
       # Faz build criando uma nova imagem com o código atualizado
@@ -22,10 +25,6 @@ jobs:
   test-job:
     runs-on: ubuntu-latest
     steps:
-      # Definindo variáveis de ambiente com dados sensíveis
-      env:
-        CI_SNYK_AUTH_TOKEN: ${{ secrets.CI_SNYK_AUTH_TOKEN }}
-        CI_SNYK_ORG: ${{ secrets.CI_SNYK_ORG }}
       # Faz download da última versão do código no repositório
       - uses: actions/checkout@v4
       # Faz download do executável do snyk

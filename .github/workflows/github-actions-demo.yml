@@ -9,11 +9,11 @@ jobs:
       # Faz download da última versão do código no repositório
       - uses: actions/checkout@v4
       # Faz build criando uma nova imagem com o código atualizado
-      - run: docker build -t $CI_DOCKERHUB_USER/devops-as2-grupo20:latest .
+      - run: docker build -t ${{ CONTEXT.CI_DOCKERHUB_USER }}/devops-as2-grupo20:latest .
       # Faz login no docker hub
-      - run: docker login -u $CI_DOCKERHUB_USER -p $CI_DOCKERHUB_PASSWORD
+      - run: docker login -u ${{ CONTEXT.CI_DOCKERHUB_USER }} -p ${{ CONTEXT.CI_DOCKERHUB_PASSWORD }}
       # Sobe a imagem criada no docker hub
-      - run: docker push $CI_DOCKERHUB_USER/devops-as2-grupo20:latest
+      - run: docker push ${{ CONTEXT.CI_DOCKERHUB_USER }}/devops-as2-grupo20:latest
 
   test-job:
     runs-on: ubuntu-latest
@@ -25,9 +25,9 @@ jobs:
       # Fornece permissão para executar o snyk
       - run: chmod +x ./snyk
       # Autentica o snyk
-      - run: ./snyk auth $CI_SNYK_AUTH_TOKEN
+      - run: ./snyk auth ${{ CONTEXT.CI_SNYK_AUTH_TOKEN }}
       # Roda os testes SAST (Static Code Analysis)
-      - run: ./snyk code test --org=$CI_SNYK_ORG
+      - run: ./snyk code test --org=${{ CONTEXT.CI_SNYK_ORG }}
 
   deploy-job:
     runs-on: ubuntu-latest

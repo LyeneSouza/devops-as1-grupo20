@@ -23,6 +23,8 @@ jobs:
       - run: docker push $CI_DOCKERHUB_USER/devops-as2-grupo20
 
   test-job:
+    # Faz com que seja executado somente após o build-job
+    needs: build-job
     runs-on: ubuntu-latest
     steps:
       # Faz download da última versão do código no repositório
@@ -37,6 +39,8 @@ jobs:
       - run: ./snyk code test --org=$CI_SNYK_ORG
 
   deploy-job:
+    # Faz com que seja executado somente após o test-job
+    needs: test-job
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

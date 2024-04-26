@@ -8,6 +8,8 @@ env:
   CI_DOCKERHUB_PASSWORD: ${{ secrets.CI_DOCKERHUB_PASSWORD }}
   CI_SNYK_AUTH_TOKEN: ${{ secrets.CI_SNYK_AUTH_TOKEN }}
   CI_SNYK_ORG: ${{ secrets.CI_SNYK_ORG }}
+  CI_TELEGRAM_TOKEN: ${{ secrets.CI_TELEGRAM_TOKEN }}
+  CI_TELEGRAM_CHAT_ID: ${{ secrets.CI_TELEGRAM_CHAT_ID }}
 
 jobs:
   build-job:
